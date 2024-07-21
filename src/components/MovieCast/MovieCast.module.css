@@ -1,0 +1,17 @@
+.list {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.image {
+  width: 350px;
+}
+.name {
+  display: flex;
+  margin: 0 auto;
+}

@@ -1,0 +1,30 @@
+.form {
+  display: flex;
+  gap: 10px;
+}
+.input {
+  width: 500px;
+  padding: 5px 10px;
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 15px;
+  background-color: white;
+  color: black;
+}
+
+.input::placeholder {
+  color: black;
+}
+
+.button {
+  background-color: white;
+  color: black;
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 0;
+  padding: 10px;
+  cursor: pointer;
+  transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.button:hover {
+  color: palevioletred;
+}

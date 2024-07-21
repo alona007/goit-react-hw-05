@@ -1,0 +1,50 @@
+.backButton {
+  padding: 5px 10px;
+  border-radius: 0;
+  color: palevioletred;
+  transition: 250ms ease-in-out;
+}
+
+.backButton:hover {
+  color: rgb(0, 0, 0);
+}
+
+.details {
+  display: flex;
+  padding: 20px 30px;
+  gap: 30px;
+  border-bottom: 1px solid rgb(0, 0, 0);
+}
+
+.image {
+  max-width: 300px;
+  max-height: 400px;
+}
+
+.information {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+}
+
+.aditional {
+  padding: 20px 30px;
+}
+
+.aditionalTitle {
+  margin-bottom: 10px;
+}
+
+.aditionalList {
+  width: 100%;
+  display: flex;
+  gap: 30px;
+  margin-bottom: 20px;
+  list-style-type: none;
+}
+
+.aditionalLink {
+  font-size: 20px;
+  color: palevioletred;
+}

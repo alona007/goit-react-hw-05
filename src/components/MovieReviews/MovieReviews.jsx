@@ -1,72 +1,60 @@
-import { useEffect, useState } from "react";
+import { fetchReviewsByNavigationId } from "../../tmdb-api";
 import { useParams } from "react-router-dom";
-import { ColorRing } from "react-loader-spinner";
-import toast from "react-hot-toast";
+import { lazy, Suspense, useEffect, useState } from "react";
+const ErrorMessage = lazy(() => import("../ErrorMessage/ErrorMessage"));
+const Loader = lazy(() => import("../Loader/Loader"));
+import css from "./MovieReviews.module.css";
 
-import { getMoviesReviews } from "../../Api/tmdb";
-import useLoad from "../../hooks/useLoad";
-
-function MovieReviews() {
-  const [reviews, setReviews] = useState([]);
-  const { loading, setLoading, error, setError } = useLoad();
-
+export default function MovieReviews() {
+  const [credits, setCredits] = useState([]);
+  const [loader, setLoader] = useState(false);
+  const [error, setError] = useState(false);
   const { movieId } = useParams();
-
   useEffect(() => {
-    async function fetchReviews() {
-      setLoading(true);
-      setError(false);
+    async function getReviews() {
       try {
-        const getReviews = await getMoviesReviews(movieId);
-        setReviews(getReviews);
-      } catch (e) {
+        setLoader(true);
+        setError(false);
+        const promise = await fetchReviewsByNavigationId(movieId);
+        setCredits(promise.results.slice(0, 3));
+      } catch {
         setError(true);
-        toast.error(e.message, {
-          position: "top-right",
-        });
+      } finally {
+        setLoader(false);
       }
-      setLoading(false);
     }
-
-    fetchReviews();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    getReviews();
   }, [movieId]);
+
+  const truncateString = (str, num) => {
+    if (str.length <= num) {
+      return str;
+    }
+    return str.substring(0, num) + "...";
+  };
 
   return (
     <>
-      <ul className="flex flex-col gap-6 m-4">
-        {loading && (
-          <ColorRing
-            visible={true}
-            height="100"
-            width="100"
-            ariaLabel="color-ring-loading"
-            wrapperStyle={{}}
-            wrapperClass="color-ring-wrapper mx-auto"
-            colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
-          />
+      <Suspense fallback={<div>Loading page code...</div>}>
+        {loader && <Loader />}
+        {error && <ErrorMessage />}
+      </Suspense>
+      <ul className={css.list}>
+        {credits.length !== 0 ? (
+          credits.map((item) => {
+            return (
+              <li className={css.item} key={item.id}>
+                <h2 className={css.title}>Author: {item.author}</h2>
+                <p className={css.content}>
+                  {truncateString(item.content, 500)}
+                </p>
+              </li>
+            );
+          })
+        ) : (
+          <div> No reviews found</div>
         )}
-        {!loading &&
-          !error &&
-          reviews.map((review) => (
-            <li key={review.id} className="bg-gray-200 px-6 py-4 rounded-md">
-              <div className="info flex justify-evenly mb-4 text-sm italic">
-                <div className="author ">Author: {review.author}</div>
-                <div className="rating">
-                  Rating: {review.rating > 0 ? review.rating : "N/A"}
-                </div>
-              </div>
-              <div className="review text-lg">{review.content}</div>
-            </li>
-          ))}
       </ul>
-      {reviews.length <= 0 && (
-        <div className="text-center text-2xl">
-          No one didn`t write review for film yet...
-        </div>
-      )}
     </>
   );
 }
-
-export default MovieReviews;
