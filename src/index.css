@@ -1,0 +1,21 @@
+nav a {
+  color: black;
+  text-decoration: none;
+  margin-right: 25px;
+}
+
+nav a.active {
+  color: palevioletred;
+  padding-left: 0;
+  width: auto;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+nav a:last-child {
+  margin-right: 0;
+}
+
+.form {
+  margin: 25px;
+}
